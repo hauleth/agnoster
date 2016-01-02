@@ -10,6 +10,8 @@ agnoster::set_default AGNOSTER_ICON_ROOT \u26a1
 agnoster::set_default AGNOSTER_ICON_BGJOBS \u2699
 agnoster::set_default AGNOSTER_ICON_GIT_BRANCH \u2387
 agnoster::set_default AGNOSTER_ICON_GIT_REF \u27a6
+agnoster::set_default AGNOSTER_ICON_GIT_STAGED '…'
+agnoster::set_default AGNOSTER_ICON_GIT_STASHED '~'
 
 function agnoster::segment --desc 'Create prompt segment'
   set bg $argv[1]
@@ -62,7 +64,7 @@ end
 # Git {{{
 # Utils {{{
 function agnoster::git::is_repo
-  command git rev-parse --is-inside-work-tree ^/dev/null
+  command git rev-parse --is-inside-work-tree ^/dev/null >/dev/null
 end
 
 function agnoster::git::color
@@ -97,19 +99,27 @@ function agnoster::git::ahead
           print "-"
       }'
 end
+
+function agnoster::git::stashed
+  command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n "$AGNOSTER_ICON_GIT_STASHED"
+end
+
+function agnoster::git::staged
+  command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n "$AGNOSTER_ICON_GIT_STAGED"
+end
 # }}}
 
 function agnoster::git -d "Display the actual git state"
   agnoster::git::is_repo; or return
 
-  # set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n '~')
-  # set -l stashed (command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n '$')
+  set -l staged  (agnoster::git::staged)
+  set -l stashed (agnoster::git::stashed)
   set -l branch (agnoster::git::branch)
   set -l ahead (agnoster::git::ahead)
 
-  set -l content "$symbol $branch$ahead "
+  set -l content "$branch$ahead$staged$stashed"
 
-  agnoster::segment (agnoster::git::color) black "$content"
+  agnoster::segment (agnoster::git::color) black "$content "
 end
 # }}}
 
