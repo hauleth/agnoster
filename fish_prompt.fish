@@ -61,6 +61,10 @@ end
 
 # Git {{{
 # Utils {{{
+function agnoster::git::is_repo
+  command git rev-parse --is-inside-work-tree ^/dev/null
+end
+
 function agnoster::git::color
   if command git diff --no-ext-diff --quiet --exit-code
     echo "green"
@@ -75,7 +79,7 @@ function agnoster::git::branch
     set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
     set ref "$AGNOSTER_ICON_GIT_REF $branch"
   end
-  echo "$ref" | sed "s|refs/heads/|$AGNOSTER_ICON_GIT_BRANCH |1"
+  echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_GIT_BRANCH |1"
 end
 
 function agnoster::git::ahead
@@ -96,7 +100,7 @@ end
 # }}}
 
 function agnoster::git -d "Display the actual git state"
-  command git status >/dev/null ^/dev/null; or return
+  agnoster::git::is_repo; or return
 
   # set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n '~')
   # set -l stashed (command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n '$')
