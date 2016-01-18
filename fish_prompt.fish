@@ -145,4 +145,7 @@ function fish_prompt
   agnoster::dir
   agnoster::git
   agnoster::finish
+
+  set_color normal
+  set_color -b normal
 end
