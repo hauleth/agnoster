@@ -10,7 +10,7 @@ function agnoster -d 'Enable theme'
     set -g AGNOSTER_ICON_GIT_REF \u27a6
     set -g AGNOSTER_ICON_GIT_STAGED '…'
     set -g AGNOSTER_ICON_GIT_STASHED '~'
-  case *
+  case '*'
     set -g AGNOSTER_SEGMENT_SEPARATOR '' '|'
     set -g AGNOSTER_ICON_ERROR \u2717
     set -g AGNOSTER_ICON_ROOT \u26a1
