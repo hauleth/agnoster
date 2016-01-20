@@ -5,6 +5,7 @@ function agnoster::set_default
 end
 
 agnoster::set_default AGNOSTER_SEGMENT_SEPARATOR '' '|'
+agnoster::set_default AGNOSTER_SEGMENT_RSEPARATOR '' '|'
 agnoster::set_default AGNOSTER_ICON_ERROR \u2717
 agnoster::set_default AGNOSTER_ICON_ROOT \u26a1
 agnoster::set_default AGNOSTER_ICON_BGJOBS \u2699
@@ -76,7 +77,7 @@ function agnoster::git::color
 end
 
 function agnoster::git::branch
-  set -l ref (command git symbolic-ref HEAD)
+  set -l ref (command git symbolic-ref HEAD ^/dev/null)
   if [ "$status" -ne 0 ]
     set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
     set ref "$AGNOSTER_ICON_GIT_REF $branch"
