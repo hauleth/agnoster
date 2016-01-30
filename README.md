@@ -12,7 +12,7 @@ Yeah, really. That's it. Be happy with your fancy new theme.
 
 ## Themes
 
-To choose theme run `agnoster <theme name>`.
+To choose theme run `agnoster <theme>`.
 
 Available themes:
 
