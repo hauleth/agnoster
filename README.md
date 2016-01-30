@@ -16,8 +16,12 @@ To choose theme run `agnoster <theme name>`.
 
 Available themes:
 
-- `default` ![default theme](screenshots/default.png)
-- `powerline` ![powerline theme](screenshots/powerline.png)
+- `default`
+
+  ![default theme](screenshots/default.png)
+- `powerline`
+
+  ![powerline theme](screenshots/powerline.png)
 
 ### Custom theme
 
