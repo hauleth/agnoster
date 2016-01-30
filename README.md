@@ -4,13 +4,24 @@ Fancy, colorful theme with support for Powerline fonts.
 
 ## Installation
 
-    wa use agnoster
+You should use [Fisherman](https://github.com/fisherman/fisherman)
+
+    fisher install hauleth/agnoster
 
 Yeah, really. That's it. Be happy with your fancy new theme.
 
-## Customization
+## Themes
 
-You can change icons used by this theme (given values are defaults):
+To choose theme run `agnoster <theme name>`.
+
+Available themes:
+
+- `default` ![default theme](screenshots/default.png)
+- `powerline` ![powerline theme](screenshots/powerline.png)
+
+### Custom theme
+
+You can create your own theme by setting these variables
 
 ```
 # Segment endings
@@ -26,18 +37,6 @@ set -g AGNOSTER_ICON_GIT_BRANCH \u2387 # unicode alternative key symbol (⎇)
 set -g AGNOSTER_ICON_GIT_REF \u27a6 # unicode heavy black curved upwards and rightwards arrow (➦)
 ```
 
-### Enable PowerLine fonts support
-
-If you have [PowerLine patched font](https://github.com/powerline/fonts) installed
-and set for your term then you can use a little bit more fancy theme variant.
-To achieve this just add `agnoster_powerline` to your `.dotfiles/init.fish`.
-
-Neat!
-
-## Screenshot
-
-![Screenshot](screen.png)
-
 ## Licence
 
-MIT
+Check [LICENSE](LICENSE)
