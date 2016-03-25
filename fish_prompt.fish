@@ -4,8 +4,8 @@ function agnoster::set_default
   set -q $name; or set -g $name $argv
 end
 
-agnoster::set_default AGNOSTER_SEGMENT_SEPARATOR '' '|'
-agnoster::set_default AGNOSTER_SEGMENT_RSEPARATOR '' '|'
+agnoster::set_default AGNOSTER_SEGMENT_SEPARATOR '' \u2502
+agnoster::set_default AGNOSTER_SEGMENT_RSEPARATOR '' \u2502
 agnoster::set_default AGNOSTER_ICON_ERROR \u2717
 agnoster::set_default AGNOSTER_ICON_ROOT \u26a1
 agnoster::set_default AGNOSTER_ICON_BGJOBS \u2699
