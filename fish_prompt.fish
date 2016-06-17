@@ -1,18 +1,22 @@
 function agnoster::set_default
   set name $argv[1]
   set -e argv[1]
-  set -q $name; or set -g $name $argv
+  set -q $name; or set $name $argv
 end
 
 agnoster::set_default AGNOSTER_SEGMENT_SEPARATOR '' \u2502
 agnoster::set_default AGNOSTER_SEGMENT_RSEPARATOR '' \u2502
+
 agnoster::set_default AGNOSTER_ICON_ERROR \u2717
 agnoster::set_default AGNOSTER_ICON_ROOT \u26a1
 agnoster::set_default AGNOSTER_ICON_BGJOBS \u2699
-agnoster::set_default AGNOSTER_ICON_GIT_BRANCH \u2387
-agnoster::set_default AGNOSTER_ICON_GIT_REF \u27a6
-agnoster::set_default AGNOSTER_ICON_GIT_STAGED '…'
-agnoster::set_default AGNOSTER_ICON_GIT_STASHED '~'
+
+agnoster::set_default AGNOSTER_ICON_SCM_BRANCH \u2387
+agnoster::set_default AGNOSTER_ICON_SCM_REF \u27a6
+agnoster::set_default AGNOSTER_ICON_SCM_STAGED '…'
+agnoster::set_default AGNOSTER_ICON_SCM_STASHED '~'
+
+agnoster::set_default AGNOSTER_PWD prompt_pwd
 
 function agnoster::segment --desc 'Create prompt segment'
   set bg $argv[1]
@@ -80,9 +84,9 @@ function agnoster::git::branch
   set -l ref (command git symbolic-ref HEAD ^/dev/null)
   if [ "$status" -ne 0 ]
     set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
-    set ref "$AGNOSTER_ICON_GIT_REF $branch"
+    set ref "$AGNOSTER_ICON_SCM_REF $branch"
   end
-  echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_GIT_BRANCH |1"
+  echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_SCM_BRANCH |1"
 end
 
 function agnoster::git::ahead
@@ -102,11 +106,11 @@ function agnoster::git::ahead
 end
 
 function agnoster::git::stashed
-  command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n "$AGNOSTER_ICON_GIT_STASHED"
+  command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n "$AGNOSTER_ICON_SCM_STASHED"
 end
 
 function agnoster::git::staged
-  command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n "$AGNOSTER_ICON_GIT_STAGED"
+  command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n "$AGNOSTER_ICON_SCM_STAGED"
 end
 # }}}
 
@@ -125,7 +129,7 @@ end
 # }}}
 
 function agnoster::dir -d 'Print current working directory'
-  set -l dir (prompt_pwd)
+  set -l dir (eval "$AGNOSTER_PWD")
   if set -q AGNOSTER_SEGMENT_SEPARATOR[2]
     set dir (echo "$dir" | sed "s,/,$AGNOSTER_SEGMENT_SEPARATOR[2],g")
   end
