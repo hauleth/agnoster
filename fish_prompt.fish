@@ -1,7 +1,7 @@
 function agnoster::set_default
   set name $argv[1]
   set -e argv[1]
-  set -q $name; or set $name $argv
+  set -q $name; or set -g $name $argv
 end
 
 agnoster::set_default AGNOSTER_SEGMENT_SEPARATOR '' \u2502
