@@ -16,8 +16,6 @@ agnoster::set_default AGNOSTER_ICON_SCM_REF \u27a6
 agnoster::set_default AGNOSTER_ICON_SCM_STAGED '…'
 agnoster::set_default AGNOSTER_ICON_SCM_STASHED '~'
 
-agnoster::set_default AGNOSTER_PWD prompt_pwd
-
 function agnoster::segment --desc 'Create prompt segment'
   set bg $argv[1]
   set fg $argv[2]
@@ -129,7 +127,7 @@ end
 # }}}
 
 function agnoster::dir -d 'Print current working directory'
-  set -l dir (eval "$AGNOSTER_PWD")
+  set -l dir (prompt_pwd)
   if set -q AGNOSTER_SEGMENT_SEPARATOR[2]
     set dir (echo "$dir" | sed "s,/,$AGNOSTER_SEGMENT_SEPARATOR[2],g")
   end
