@@ -1,4 +1,17 @@
 function agnoster -d 'Enable theme'
+  # Cleanup old variables
+  set -e AGNOSTER_SEGMENT_SEPARATOR
+  set -e AGNOSTER_SEGMENT_RSEPARATOR
+
+  set -e AGNOSTER_ICON_ERROR
+  set -e AGNOSTER_ICON_ROOT
+  set -e AGNOSTER_ICON_BGJOBS
+
+  set -e AGNOSTER_ICON_SCM_BRANCH
+  set -e AGNOSTER_ICON_SCM_REF
+  set -e AGNOSTER_ICON_SCM_STAGED
+  set -e AGNOSTER_ICON_SCM_STASHED
+
   switch $argv[1]
   case powerline
     set -U AGNOSTER_SEGMENT_SEPARATOR \ue0b0 ' '\ue0b1' '
