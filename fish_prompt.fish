@@ -19,7 +19,7 @@ agnoster::set_default AGNOSTER_ICON_SCM_STASHED '~'
 function agnoster::segment --desc 'Create prompt segment'
   set bg $argv[1]
   set fg $argv[2]
-  set -e argv[1] argv[2]
+  set -e argv[1 2]
   set content $argv
 
   set_color -b $bg
@@ -41,6 +41,10 @@ function agnoster::context
 
   if [ "$user" != "$DEFAULT_USER" ]; or [ -n "$SSH_CLIENT" ]
     agnoster::segment black normal "$user@$host "
+  end
+
+  if [ ! -z "$IN_NIX_SHELL" ]
+    agnoster::segment red black "nix "
   end
 end
 
