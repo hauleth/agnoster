@@ -4,9 +4,17 @@ Fancy, colorful theme with support for Powerline fonts.
 
 ## Installation
 
-You should use [Fisherman](https://github.com/fisherman/fisherman)
+With [Fisher](https://github.com/fisherman/fisherman)
 
-    fisher install hauleth/agnoster
+    fisher add hauleth/agnoster
+
+With [Fundle](https://github.com/danhper/fundle) add:
+
+    fundle plugin hauleth/agnoster
+    
+to your `config.fish` and run `fundle install`.
+
+---
 
 Yeah, really. That's it. Be happy with your fancy new theme.
 
@@ -43,4 +51,4 @@ set -U AGNOSTER_ICON_GIT_REF \u27a6 # unicode heavy black curved upwards and rig
 
 ## Licence
 
-Check [LICENSE](LICENSE)
+Agnoster is MIT licensed. See [LICENSE](LICENSE) file for details.
