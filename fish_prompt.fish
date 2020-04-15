@@ -71,7 +71,7 @@ end
 # Git {{{
 # Utils {{{
 function agnoster::git::is_repo
-  command git rev-parse --is-inside-work-tree ^/dev/null >/dev/null
+  command git rev-parse --is-inside-work-tree 2>/dev/null >/dev/null
 end
 
 function agnoster::git::color
@@ -83,16 +83,16 @@ function agnoster::git::color
 end
 
 function agnoster::git::branch
-  set -l ref (command git symbolic-ref HEAD ^/dev/null)
+  set -l ref (command git symbolic-ref HEAD 2>/dev/null)
   if [ "$status" -ne 0 ]
-    set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
+    set -l branch (command git show-ref --head -s --abbrev | head -n1 2>/dev/null)
     set ref "$AGNOSTER_ICON_SCM_REF $branch"
   end
   echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_SCM_BRANCH |1"
 end
 
 function agnoster::git::ahead
-  command git rev-list --left-right '@{upstream}...HEAD' ^/dev/null | \
+  command git rev-list --left-right '@{upstream}...HEAD' 2>/dev/null | \
     awk '
       />/ {a += 1}
       /</ {b += 1}
