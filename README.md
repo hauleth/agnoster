@@ -6,7 +6,7 @@ Fancy, colorful theme with support for Powerline fonts.
 
 With [Fisher](https://github.com/fisherman/fisherman)
 
-    fisher add hauleth/agnoster
+    fisher install hauleth/agnoster
 
 With [Fundle](https://github.com/danhper/fundle) add:
 
