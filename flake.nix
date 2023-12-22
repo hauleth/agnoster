@@ -10,7 +10,7 @@
       fishPlugins = prev.fishPlugins.overrideScope' (finalx: prevx: {
         agnoster = prevx.buildFishPlugin {
           pname = "agnoster";
-          version = "0.0.1";
+          version = "latest";
           src = ./.;
         };
       });

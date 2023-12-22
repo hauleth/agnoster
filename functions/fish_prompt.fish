@@ -1,5 +1,5 @@
 function agnoster::set_default
-  set name $argv[1]
+  set -f name $argv[1]
   set -e argv[1]
   set -q $name; or set -g $name $argv
 end
@@ -17,10 +17,10 @@ agnoster::set_default AGNOSTER_ICON_SCM_STAGED '…'
 agnoster::set_default AGNOSTER_ICON_SCM_STASHED '~'
 
 function agnoster::segment --desc 'Create prompt segment'
-  set bg $argv[1]
-  set fg $argv[2]
+  set -f bg $argv[1]
+  set -f fg $argv[2]
   set -e argv[1 2]
-  set content $argv
+  set -f content $argv
 
   set_color -b $bg
 
@@ -36,8 +36,8 @@ function agnoster::segment --desc 'Create prompt segment'
 end
 
 function agnoster::context
-  set user (whoami)
-  set host (hostname)
+  set -f user (whoami)
+  set -f host (hostname)
 
   if [ "$user" != "$DEFAULT_USER" ]; or [ -n "$SSH_CLIENT" ]
     agnoster::segment black normal "$user@$host "
@@ -54,13 +54,13 @@ end
 # - are there background jobs?
 function agnoster::status
   if [ "$__agnoster_last_status" -ne 0 ]
-    set icons $icons "$AGNOSTER_ICON_ERROR"
+    set -f icons $icons "$AGNOSTER_ICON_ERROR"
   end
   if [ (id -u $USER) -eq 0 ]
-    set icons $icons "$AGNOSTER_ICON_ROOT"
+    set -f icons $icons "$AGNOSTER_ICON_ROOT"
   end
   if [ (jobs -l | wc -l) -ne 0 ]
-    set icons $icons "$AGNOSTER_ICON_BGJOBS"
+    set -f icons $icons "$AGNOSTER_ICON_BGJOBS"
   end
 
   if set -q icons
@@ -83,10 +83,10 @@ function agnoster::git::color
 end
 
 function agnoster::git::branch
-  set -l ref (command git symbolic-ref HEAD 2>/dev/null)
+  set -f ref (command git symbolic-ref HEAD 2>/dev/null)
   if [ "$status" -ne 0 ]
-    set -l branch (command git show-ref --head -s --abbrev | head -n1 2>/dev/null)
-    set ref "$AGNOSTER_ICON_SCM_REF $branch"
+    set -f branch (command git show-ref --head -s --abbrev | head -n1 2>/dev/null)
+    set -f ref "$AGNOSTER_ICON_SCM_REF $branch"
   end
   echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_SCM_BRANCH |1"
 end
@@ -119,21 +119,21 @@ end
 function agnoster::git -d "Display the actual git state"
   agnoster::git::is_repo; or return
 
-  set -l staged  (agnoster::git::staged)
-  set -l stashed (agnoster::git::stashed)
-  set -l branch (agnoster::git::branch)
-  set -l ahead (agnoster::git::ahead)
+  set -f staged  (agnoster::git::staged)
+  set -f stashed (agnoster::git::stashed)
+  set -f branch (agnoster::git::branch)
+  set -f ahead (agnoster::git::ahead)
 
-  set -l content "$branch$ahead$staged$stashed"
+  set -f content "$branch$ahead$staged$stashed"
 
   agnoster::segment (agnoster::git::color) black "$content "
 end
 # }}}
 
 function agnoster::dir -d 'Print current working directory'
-  set -l dir (prompt_pwd)
+  set -f dir (prompt_pwd)
   if set -q AGNOSTER_SEGMENT_SEPARATOR[2]
-    set dir (echo "$dir" | sed "s,/,$AGNOSTER_SEGMENT_SEPARATOR[2],g")
+    set -f dir (echo "$dir" | sed "s,/,$AGNOSTER_SEGMENT_SEPARATOR[2],g")
   end
   agnoster::segment blue black "$dir "
 end
