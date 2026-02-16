@@ -85,24 +85,21 @@ end
 function agnoster::git::branch
   set -f ref (command git symbolic-ref HEAD 2>/dev/null)
   if [ "$status" -ne 0 ]
-    set -f branch (command git show-ref --head -s --abbrev | head -n1 2>/dev/null)
+    set -f branch (command git rev-parse --short HEAD)
     set -f ref "$AGNOSTER_ICON_SCM_REF $branch"
   end
-  echo "$ref" | sed "s|\s*refs/heads/|$AGNOSTER_ICON_SCM_BRANCH |1"
+  string replace 'refs/heads/' "$AGNOSTER_ICON_SCM_BRANCH " $ref
 end
 
 function agnoster::git::ahead
-  command git rev-list --left-right '@{upstream}...HEAD' 2>/dev/null | \
+  command git rev-list --count --left-right '@{upstream}...HEAD' 2>/dev/null | \
     awk '
-      />/ {a += 1}
-      /</ {b += 1}
-      {if (a > 0 && b > 0) nextfile}
-      END {
-        if (a > 0 && b > 0)
+      {
+        if ($1 > 0 && $2 > 0)
           print "±";
-        else if (a > 0)
+        else if ($1 > 0)
           print "+";
-        else if (b > 0)
+        else if ($2 > 0)
           print "-"
       }'
 end
@@ -117,7 +114,7 @@ end
 # }}}
 
 function agnoster::git -d "Display the actual git state"
-  agnoster::git::is_repo; or return
+  agnoster::git::is_repo; or return 1
 
   set -f staged  (agnoster::git::staged)
   set -f stashed (agnoster::git::stashed)
@@ -130,10 +127,24 @@ function agnoster::git -d "Display the actual git state"
 end
 # }}}
 
+function agnoster::jj
+    set -f msg (
+        command jj log 2>/dev/null \
+            --revisions '@' \
+            --no-graph \
+            --ignore-working-copy \
+            --color=never \
+            --template 'concat(separate(" ", change_id.shortest(), if(conflict, "×")), " ")'
+    )
+    or return 1
+
+    agnoster::segment 'green' 'black' $msg
+end
+
 function agnoster::dir -d 'Print current working directory'
   set -f dir (prompt_pwd)
   if set -q AGNOSTER_SEGMENT_SEPARATOR[2]
-    set -f dir (echo "$dir" | sed "s,/,$AGNOSTER_SEGMENT_SEPARATOR[2],g")
+    set -f dir (string replace --all '/' $AGNOSTER_SEGMENT_SEPARATOR[2] "$dir")
   end
   agnoster::segment blue black "$dir "
 end
@@ -150,7 +161,7 @@ function fish_prompt
   agnoster::status
   agnoster::context
   agnoster::dir
-  agnoster::git
+  agnoster::jj; or agnoster::git
   agnoster::finish
 
   set_color normal
